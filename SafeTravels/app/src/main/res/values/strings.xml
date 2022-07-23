@@ -21,4 +21,6 @@
     <string name="action_upload_image">Upload Image</string>
     <string name="prompt_profile_image">Profile Image</string>
     <string name="prompt_error">Error Label</string>
+    <string name="action_take_photo">Take a Photo</string>
+    <string name="action_upload_from_library">Choose from Library</string>
 </resources>

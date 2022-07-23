@@ -81,6 +81,10 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
 
+            String email = emailETV.getText().toString();
+            String password = passwordETV.getText().toString();
+
+            logInUser(email, password);
         }
     };
 
