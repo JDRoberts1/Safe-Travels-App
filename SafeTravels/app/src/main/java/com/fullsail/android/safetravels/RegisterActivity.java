@@ -152,7 +152,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void updateUI(FirebaseUser user) {
-        
+
         String userName = uName.getText().toString();
 
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
