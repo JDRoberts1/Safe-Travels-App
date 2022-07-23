@@ -7,9 +7,14 @@ import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 public class LaunchActivity extends AppCompatActivity {
 
     final Handler handler = new Handler();
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    FirebaseUser cUser = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,17 +26,38 @@ public class LaunchActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                //Do something after 100ms
-                toMainScreen();
+                // TODO: check if a user is currently logged in
+
+                if (cUser != null){
+                    toMainScreen();
+                }
+                else{
+                    toLogInScreen();
+                }
             }
-        }, 500);
+        }, 1000);
     }
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        // check if a user is currently logged in
+        cUser = mAuth.getCurrentUser();
+    }
+
+    // MARK: toMainScreen
+    // method to take the user to the main screen if already logged in
     private void toMainScreen(){
         Intent mainScreenIntent = new Intent(this, MainActivity.class);
         startActivity(mainScreenIntent);
     }
 
-
-
+    // MARK: toLogInScreen
+    // method to take the user to the log in screen if not already logged in
+    private void toLogInScreen(){
+        Intent logInScreenIntent = new Intent(this, LoginActivity.class);
+        startActivity(logInScreenIntent);
+    }
 }

@@ -8,8 +8,9 @@
         <entry key="app/src/main/res/layout-w1240dp/activity_login.xml" value="0.1765625" />
         <entry key="app/src/main/res/layout-w936dp/activity_login.xml" value="0.126953125" />
         <entry key="app/src/main/res/layout/activity_launch.xml" value="0.3302083333333333" />
-        <entry key="app/src/main/res/layout/activity_login.xml" value="0.16927083333333334" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.27842152913411444" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.3302083333333333" />
+        <entry key="app/src/main/res/layout/activity_register.xml" value="0.23857421875" />
       </map>
     </option>
   </component>

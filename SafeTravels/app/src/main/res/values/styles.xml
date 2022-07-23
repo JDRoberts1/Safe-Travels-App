@@ -14,4 +14,29 @@
         <item name="postSplashScreenTheme">@style/Theme.SafeTravels</item>
     </style>
 
+    <style name="Title_TV_Style">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/gayathri_thin</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">@color/orange_700</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="Button_TV_Style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/gayathri_thin</item>
+        <item name="android:textColor">@color/blue_700</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="ETV_Style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:backgroundTint">@color/orange_700</item>
+        <item name="android:foregroundTint">@color/orange_700</item>
+        <item name="android:importantForAutofill">no</item>
+    </style>
+
 </resources>

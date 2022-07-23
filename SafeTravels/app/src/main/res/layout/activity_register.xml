@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/profile_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:contentDescription="@string/prompt_profile_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/profile_img_label"
+        style="@style/Button_TV_Style"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:minHeight="48dp"
+        android:text="@string/action_upload_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_iv"
+        tools:ignore="TextContrastCheck" />
+
+    <TextView
+        android:id="@+id/label_first_name"
+        style="@style/Title_TV_Style"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/prompt_first_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_img_label"
+        tools:ignore="TextContrastCheck" />
+
+    <EditText
+        android:id="@+id/first_name_etv"
+        style="@style/ETV_Style"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="4dp"
+        android:ems="10"
+        android:hint="@string/prompt_first_name"
+        android:importantForAutofill="no"
+        android:inputType="textPersonName"
+        android:textColorHint="#546E7A"
+        app:layout_constraintEnd_toStartOf="@+id/last_name_etv"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/label_first_name"
+        tools:ignore="SpeakableTextPresentCheck,DuplicateSpeakableTextCheck" />
+
+    <TextView
+        android:id="@+id/label_last_name"
+        style="@style/Title_TV_Style"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="52dp"
+        android:text="@string/prompt_last_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_img_label"
+        tools:ignore="TextContrastCheck" />
+
+    <EditText
+        android:id="@+id/last_name_etv"
+        style="@style/ETV_Style"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="4dp"
+        android:ems="10"
+        android:hint="@string/prompt_last_name"
+        android:importantForAutofill="no"
+        android:inputType="textPersonName"
+        android:textColorHint="#546E7A"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/label_last_name"
+        tools:ignore="SpeakableTextPresentCheck,DuplicateSpeakableTextCheck" />
+
+    <TextView
+        android:id="@+id/label_username"
+        style="@style/Title_TV_Style"
+        android:text="@string/prompt_username"
+        app:layout_constraintBottom_toTopOf="@+id/username_etv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/last_name_etv"
+        tools:ignore="TextContrastCheck" />
+
+    <EditText
+        android:id="@+id/username_etv"
+        style="@style/ETV_Style"
+        android:ems="10"
+        android:hint="@string/prompt_username"
+        android:importantForAutofill="no"
+        android:inputType="textEmailAddress"
+        android:minHeight="48dp"
+        android:textColorHint="#546E7A"
+        app:layout_constraintBottom_toTopOf="@+id/email_register_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/label_username"
+        tools:ignore="SpeakableTextPresentCheck,DuplicateSpeakableTextCheck" />
+
+    <TextView
+        android:id="@+id/email_register_label"
+        style="@style/Title_TV_Style"
+        android:text="@string/prompt_email"
+        app:layout_constraintBottom_toTopOf="@+id/email_register_etv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/username_etv"
+        tools:ignore="TextContrastCheck" />
+
+    <EditText
+        android:id="@+id/email_register_etv"
+        style="@style/ETV_Style"
+        android:ems="10"
+        android:hint="@string/prompt_email"
+        android:importantForAutofill="no"
+        android:inputType="textEmailAddress"
+        android:textColorHint="#546E7A"
+        app:layout_constraintBottom_toTopOf="@+id/password_register_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/email_register_label"
+        tools:ignore="SpeakableTextPresentCheck,DuplicateSpeakableTextCheck" />
+
+    <TextView
+        android:id="@+id/password_register_label"
+        style="@style/Title_TV_Style"
+        android:text="@string/prompt_password"
+        app:layout_constraintBottom_toTopOf="@+id/password_register_etv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/email_register_etv"
+        tools:ignore="TextContrastCheck" />
+
+    <EditText
+        android:id="@+id/password_register_etv"
+        style="@style/ETV_Style"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="@string/prompt_password"
+        android:importantForAutofill="no"
+        android:inputType="textPassword"
+        android:textColorHint="#546E7A"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password_register_label"
+        tools:ignore="SpeakableTextPresentCheck,DuplicateSpeakableTextCheck" />
+
+    <Button
+        android:id="@+id/sign_up_bttn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/action_register"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password_register_etv" />
+
+    <TextView
+        android:id="@+id/textView7"
+        style="@style/Button_TV_Style"
+        android:layout_width="47dp"
+        android:layout_height="32dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
+        android:text="@string/action_sign_in_short"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.487"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sign_up_bttn"
+        app:layout_constraintVertical_bias="1.0"
+        tools:ignore="TextContrastCheck,TouchTargetSizeCheck" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
