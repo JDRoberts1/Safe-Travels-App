@@ -21,6 +21,11 @@
     <string name="action_upload_image">Upload Image</string>
     <string name="prompt_profile_image">Profile Image</string>
     <string name="prompt_error">Error Label</string>
-    <string name="action_take_photo">Take a Photo</string>
-    <string name="action_upload_from_library">Choose from Library</string>
+    <string name="prompt_photo">Upload Profile Image</string>
+    <string name="action_cancel">Cancel</string>
+    <string-array name="actions_image">
+        <item>Take a Photo</item>
+        <item>Choose from Library</item>
+        <item>Cancel</item>
+    </string-array>
 </resources>

@@ -75,19 +75,14 @@
 
     <Button
         android:id="@+id/sign_in_bttn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:backgroundTint="@color/orange_700"
-        android:fontFamily="@font/gayathri_thin"
         android:text="@string/action_sign_in_short"
-        android:textColor="@color/white"
-        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/forgot_password_bttn"
-        tools:ignore="TextContrastCheck" />
+        tools:ignore="TextContrastCheck"
+        style="@style/BttnStyle" />
 
     <TextView
         android:id="@+id/register_bttn"

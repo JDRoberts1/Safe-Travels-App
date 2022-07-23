@@ -1,5 +1,6 @@
 package com.fullsail.android.safetravels;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -91,16 +92,27 @@ public class LoginActivity extends AppCompatActivity {
     View.OnClickListener forgotPWClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
+            forgotPWIntent();
         }
     };
+
+    private void forgotPWIntent() {
+        //Intent logInScreenIntent = new Intent(this, ResetActivity.class);
+        //startActivity(logInScreenIntent);
+    }
 
     View.OnClickListener createAcctClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
+            registerIntent();
         }
     };
+
+    private void registerIntent() {
+        Intent logInScreenIntent = new Intent(this, RegisterActivity.class);
+        startActivity(logInScreenIntent);
+    }
+
 
 }
 
