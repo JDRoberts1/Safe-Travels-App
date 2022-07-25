@@ -2,10 +2,12 @@ package com.fullsail.android.safetravels;
 
 import android.Manifest;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -25,27 +27,31 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private static final String TAG = "RegisterActivity";
-    EditText fName;
-    EditText lName;
+    public static final String TAG = "RegisterActivity";
+
     EditText uName;
     EditText emailETV;
     EditText passwordETV;
     Button signUpBttn;
     TextView signInTV;
+    TextView errorLabel;
     Button uploadTV;
     ImageView profileImage;
 
+    Bitmap imageBitmap = null;
+    boolean imgUploaded = false;
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_IMAGE_GALLERY = 2;
@@ -58,19 +64,23 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        fName = findViewById(R.id.first_name_etv);
-        lName = findViewById(R.id.last_name_etv);
+        errorLabel = findViewById(R.id.error_label_regis);
+
         uName = findViewById(R.id.username_etv);
         emailETV = findViewById(R.id.email_register_etv);
         passwordETV = findViewById(R.id.password_register_etv);
+
         signUpBttn = findViewById(R.id.sign_up_bttn);
         signUpBttn.setOnClickListener(registerClick);
+
         signInTV = findViewById(R.id.signIn_TV);
         signInTV.setClickable(true);
         signInTV.setOnClickListener(signInClick);
+
         uploadTV = findViewById(R.id.upload_bttn);
         uploadTV.setOnClickListener(uploadClick);
-        profileImage = findViewById(R.id.profile_picture_iv);
+
+        profileImage = findViewById(R.id.profile_picture_iv_etv);
     }
 
     View.OnClickListener registerClick = new View.OnClickListener() {
@@ -78,62 +88,81 @@ public class RegisterActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
 
-            final String email = emailETV.getText().toString();
-            final String password = emailETV.getText().toString();
+            if (checkForEmptyFields()){
+                final String email = emailETV.getText().toString();
+                final String password = passwordETV.getText().toString();
 
-            mAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
-                                Log.d(TAG, "createUserWithEmail:success");
-                                FirebaseUser user = mAuth.getCurrentUser();
+                mAuth.createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    // Sign in success, update UI with the signed-in user's information
+                                    Log.d(TAG, "createUserWithEmail:success");
+                                    FirebaseUser user = mAuth.getCurrentUser();
 
-                                if (user != null) {
-                                    updateUI(user);
+                                    if (user != null) {
+                                        updateUI(user);
+                                    }
+
+                                    logInScreenIntent();
+
                                 }
-
-                            } else {
-                                // If sign in fails, display a message to the user.
-                                Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                                Toast.makeText(RegisterActivity.this, "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
+                                else {
+                                    // If sign in fails, display a message to the user.
+                                    Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                                }
                             }
-                        }
-                    });
+                        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        errorLabel.setText(e.getLocalizedMessage());
+                    }
+                });
+            }
+            else{
+                errorLabel.setText(R.string.warning_empty_field);
+            }
         }
     };
+
+    private void logInScreenIntent() {
+        // Intent to Main screen
+        Intent logInScreenIntent = new Intent(RegisterActivity.this, LoginActivity.class);
+        startActivity(logInScreenIntent);
+    }
 
     // Activity Contracts
 
     // Contract to Request Permission if not granted
     public ActivityResultLauncher<String> requestPerms = registerForActivityResult(new ActivityResultContracts.RequestPermission(), result -> Log.i(TAG, "onActivityResult: " + result));
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        profileImage.setVisibility(View.VISIBLE);
+
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            profileImage.setImageBitmap(imageBitmap);
+            imageBitmap = (Bitmap) extras.get("data");
         }
         else if (requestCode == REQUEST_IMAGE_GALLERY && resultCode == RESULT_OK){
-            Bitmap bm=null;
+
             if (data != null) {
                 try {
-                    bm = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
+                    imageBitmap = (Bitmap) MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-            profileImage.setImageBitmap(bm);
         }
 
-    }
+        profileImage.setImageBitmap(imageBitmap);
+        imgUploaded = true;
 
+    }
 
     private void dispatchTakePictureIntent(Intent i) {
         try {
@@ -151,14 +180,41 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
+    public Uri getImgUri(Context c, Bitmap bitmapImg, String uuid){
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        bitmapImg.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(c.getContentResolver(), bitmapImg, uuid, null);
+        return Uri.parse(path);
+    }
+
+    private boolean checkForEmptyFields(){
+        // Check if any fiends are empty or only contain whitespace
+        if (uName.getText().toString().isEmpty() || uName.getText().toString().trim().isEmpty()){
+            return false;
+        }
+        else if (emailETV.getText().toString().isEmpty() || emailETV.getText().toString().trim().isEmpty()){
+            return false;
+        }
+        else return !passwordETV.getText().toString().isEmpty() && !passwordETV.getText().toString().trim().isEmpty();
+    }
+
     private void updateUI(FirebaseUser user) {
 
         String userName = uName.getText().toString();
 
-        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                .setDisplayName(userName)
-                // get photo uri
-                .build();
+        UserProfileChangeRequest profileUpdates;
+        if (imgUploaded){
+            Uri imgUri = getImgUri(this, imageBitmap, user.getUid());
+
+            profileUpdates = new UserProfileChangeRequest.Builder()
+                    .setDisplayName(userName)
+                    .setPhotoUri(imgUri)
+                    .build();
+        } else{
+            profileUpdates = new UserProfileChangeRequest.Builder()
+                    .setDisplayName(userName)
+                    .build();
+        }
 
         user.updateProfile(profileUpdates)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -177,8 +233,7 @@ public class RegisterActivity extends AppCompatActivity {
         public void onClick(View v) {
 
             // TODO: Create Intent to take user to sign in screen
-            Intent logInScreenIntent = new Intent(RegisterActivity.this, LoginActivity.class);
-            startActivity(logInScreenIntent);
+            logInScreenIntent();
         }
     };
 

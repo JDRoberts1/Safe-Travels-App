@@ -7,11 +7,15 @@
         <entry key="app/src/main/res/drawable/splash_background.xml" value="0.115" />
         <entry key="app/src/main/res/layout-w1240dp/activity_login.xml" value="0.1765625" />
         <entry key="app/src/main/res/layout-w936dp/activity_login.xml" value="0.126953125" />
+        <entry key="app/src/main/res/layout/activity_edit_profile.xml" value="0.21849975585937503" />
         <entry key="app/src/main/res/layout/activity_launch.xml" value="0.3302083333333333" />
-        <entry key="app/src/main/res/layout/activity_login.xml" value="0.27842152913411444" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.35420125325520835" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.3302083333333333" />
         <entry key="app/src/main/res/layout/activity_register.xml" value="0.23857421875" />
+        <entry key="app/src/main/res/layout/activity_reset_password.xml" value="0.31614583333333335" />
         <entry key="app/src/main/res/layout/activity_signup.xml" value="0.25157232704402516" />
+        <entry key="app/src/main/res/layout/activity_verification.xml" value="0.3302083333333333" />
+        <entry key="app/src/main/res/menu/menu_main.xml" value="0.3302083333333333" />
       </map>
     </option>
   </component>

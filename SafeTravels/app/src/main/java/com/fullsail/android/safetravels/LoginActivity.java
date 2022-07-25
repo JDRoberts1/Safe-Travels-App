@@ -21,12 +21,13 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private static final String TAG = "LoginActivity:";
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    public static final String TAG = "LoginActivity";
+    private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     Button signInBttn;
     TextView forgotPasswordTV;
     TextView createAccountTV;
+
     TextView errorLabel;
     EditText emailETV;
     EditText passwordETV;
@@ -50,6 +51,49 @@ public class LoginActivity extends AppCompatActivity {
         passwordETV = findViewById(R.id.password_login_etv);
     }
 
+    View.OnClickListener signInClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+            String email = emailETV.getText().toString();
+            String password = passwordETV.getText().toString();
+
+            if (nullCheck(email, password)){
+                logInUser(email, password);
+            }
+            else {
+                errorLabel.setText(R.string.warning_empty_field);
+            }
+        }
+    };
+
+    View.OnClickListener forgotPWClick = v -> forgotPWIntent();
+
+    View.OnClickListener createAcctClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            registerIntent();
+        }
+    };
+
+    private void forgotPWIntent() {
+        Intent passwordIntent = new Intent(this, ResetPasswordActivity.class);
+        startActivity(passwordIntent);
+    }
+
+    private void registerIntent() {
+        Intent logInScreenIntent = new Intent(this, RegisterActivity.class);
+        startActivity(logInScreenIntent);
+    }
+
+    private boolean nullCheck(String email, String pw){
+
+        if (email.isEmpty() || email.trim().isEmpty()){
+            return false;
+        }
+        else return !pw.isEmpty() && !pw.trim().isEmpty();
+    }
+
     // Method to log user in
     private void logInUser(String email, String password){
         mAuth.signInWithEmailAndPassword(email, password)
@@ -61,11 +105,11 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
-                            updateUI(null);
+                            errorLabel.setText(task.getException().getLocalizedMessage());
                         }
                     }
                 });
@@ -75,44 +119,12 @@ public class LoginActivity extends AppCompatActivity {
     // Method to update the UI and take the user to the main screen
     private void updateUI(FirebaseUser user) {
         // TODO: Create Intent to take user to the main screen
-
-    }
-
-    View.OnClickListener signInClick = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-
-            String email = emailETV.getText().toString();
-            String password = passwordETV.getText().toString();
-
-            logInUser(email, password);
+        if (user != null){
+            Intent mainScreenIntent = new Intent(this, MainActivity.class);
+            mainScreenIntent.putExtra(TAG, user);
+            startActivity(mainScreenIntent);
         }
-    };
-
-    View.OnClickListener forgotPWClick = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            forgotPWIntent();
-        }
-    };
-
-    private void forgotPWIntent() {
-        //Intent logInScreenIntent = new Intent(this, ResetActivity.class);
-        //startActivity(logInScreenIntent);
     }
-
-    View.OnClickListener createAcctClick = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            registerIntent();
-        }
-    };
-
-    private void registerIntent() {
-        Intent logInScreenIntent = new Intent(this, RegisterActivity.class);
-        startActivity(logInScreenIntent);
-    }
-
 
 }
 

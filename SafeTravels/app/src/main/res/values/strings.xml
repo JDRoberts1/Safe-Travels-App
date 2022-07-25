@@ -20,12 +20,28 @@
     <string name="prompt_password_confirmation">Confirm Password</string>
     <string name="action_upload_image">Upload Image</string>
     <string name="prompt_profile_image">Profile Image</string>
-    <string name="prompt_error">Error Label</string>
+    <string name="prompt_error"> </string>
     <string name="prompt_photo">Upload Profile Image</string>
     <string name="action_cancel">Cancel</string>
+    <string name="action_edit_profile">Edit Profile</string>
+    <string name="action_update_profile">Update Profile</string>
+    <string name="action_log_out">Log Out</string>
+    <string name="action_remove_account">Delete Account</string>
+    <string name="prompt_log_in">Log In</string>
+    <string name="action_send_reset">Send Password Reset email</string>
+    <string name="prompt_enter_email">Enter email address</string>
+    <string name="warning_empty_field">All fields are required</string>
+    <string name="prompt_welcome">Welcome, User!</string>
+
     <string-array name="actions_image">
         <item>Take a Photo</item>
         <item>Choose from Library</item>
         <item>Cancel</item>
     </string-array>
+
+    <string name="title_activity_reset_password">ResetPasswordActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="prompt_welcome_pl">\"Welcome, \"</string>
+    <string name="prompt_profile_updated">User profile updated.</string>
 </resources>

@@ -48,4 +48,30 @@
         <item name="android:textSize">16sp</item>
     </style>
 
+    <style name="Widget.Theme.SafeTravels.Starting.ActionBar.Fullscreen" parent="Widget.AppCompat.ActionBar">
+        <item name="android:background">@color/black_overlay</item>
+    </style>
+
+    <style name="Widget.Theme.SafeTravels.Starting.ButtonBar.Fullscreen" parent="">
+        <item name="android:background">@color/black_overlay</item>
+        <item name="android:buttonBarStyle">?android:attr/buttonBarStyle</item>
+    </style>
+
+    <style name="TitleStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">52dp</item>
+        <item name="android:fontFamily">@font/gayathri_thin</item>
+        <item name="android:textColor">@color/orange_700</item>
+        <item name="android:textSize">34sp</item>
+    </style>
+
+    <style name="ErrorLabelStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">#CF0404</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
 </resources>
