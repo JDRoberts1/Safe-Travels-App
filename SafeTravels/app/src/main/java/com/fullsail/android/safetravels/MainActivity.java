@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         displayInfo();
     }
 
+    // Method to display current users profile information
     private void displayInfo(){
 
         if (cUser.getDisplayName() != null) {
@@ -45,25 +46,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void displayNewInfo(FirebaseUser u){
-
-        if (u.getDisplayName() != null) {
-            String welcomeString = "Welcome, "+ cUser.getDisplayName();
-            welcomeLabel.setText(welcomeString);
-        }
-
-        if (u.getPhotoUrl() != null) {
-            iv.setImageURI(cUser.getPhotoUrl());
-        }
-
-    }
-
+    // Menu Creation
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
+    // Method for menu selections
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 

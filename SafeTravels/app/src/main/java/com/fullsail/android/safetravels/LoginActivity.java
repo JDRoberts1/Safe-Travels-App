@@ -7,15 +7,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.splashscreen.SplashScreen;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -51,6 +45,7 @@ public class LoginActivity extends AppCompatActivity {
         passwordETV = findViewById(R.id.password_login_etv);
     }
 
+    // OnClickListener for Sign-In textview
     View.OnClickListener signInClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -67,25 +62,25 @@ public class LoginActivity extends AppCompatActivity {
         }
     };
 
+    // OnClickListener for Forgot Password button
     View.OnClickListener forgotPWClick = v -> forgotPWIntent();
 
-    View.OnClickListener createAcctClick = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            registerIntent();
-        }
-    };
+    // OnClickListener for Create Account button
+    View.OnClickListener createAcctClick = v -> registerIntent();
 
+    // Intent method to take user to Reset Password activity
     private void forgotPWIntent() {
         Intent passwordIntent = new Intent(this, ResetPasswordActivity.class);
         startActivity(passwordIntent);
     }
 
+    // Intent method to take user to Register activity
     private void registerIntent() {
         Intent logInScreenIntent = new Intent(this, RegisterActivity.class);
         startActivity(logInScreenIntent);
     }
 
+    // Method to validate user entries for blanks and whitespace
     private boolean nullCheck(String email, String pw){
 
         if (email.isEmpty() || email.trim().isEmpty()){
@@ -97,20 +92,17 @@ public class LoginActivity extends AppCompatActivity {
     // Method to log user in
     private void logInUser(String email, String password){
         mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d(TAG, "signInWithEmail:success");
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        updateUI(user);
 
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            errorLabel.setText(task.getException().getLocalizedMessage());
-                        }
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w(TAG, "signInWithEmail:failure", task.getException());
+                        errorLabel.setText(task.getException().getLocalizedMessage());
                     }
                 });
 

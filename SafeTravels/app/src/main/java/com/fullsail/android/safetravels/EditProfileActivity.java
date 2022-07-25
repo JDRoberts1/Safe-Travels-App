@@ -18,13 +18,11 @@ import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -80,42 +78,7 @@ public class EditProfileActivity extends AppCompatActivity {
         displayInfo();
     }
 
-    // Display current users profile information
-    private void displayInfo(){
-
-        emailETV.setText(user.getEmail());
-
-        if (user.getDisplayName() != null) {
-            uName.setText(user.getDisplayName());
-        }
-
-        if (user.getPhotoUrl() != null) {
-            profileImage.setImageURI(user.getPhotoUrl());
-        }
-
-    }
-
-    // Intent to send the user back to Log In Screen
-    private void logOutIntent(){
-        FirebaseAuth.getInstance().signOut();
-        Intent logInIntent = new Intent(EditProfileActivity.this, LoginActivity.class);
-        startActivity(logInIntent);
-    }
-
-
-    private boolean nullCheck(String email, String username){
-
-        if (email.isEmpty() || email.trim().isEmpty()){
-            return false;
-        }
-        else return !username.isEmpty() && !username.trim().isEmpty();
-    }
-
-    // Activity Contracts
-    // Contract to Request Permission if not granted
-    public ActivityResultLauncher<String> requestPerms = registerForActivityResult(new ActivityResultContracts.RequestPermission(), result -> Log.i(TAG, "onActivityResult: " + result));
-
-// Activity Result for Camera Intent
+    // Activity Result for Camera Intent
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -140,6 +103,41 @@ public class EditProfileActivity extends AppCompatActivity {
         profileImage.setImageBitmap(imageBitmap);
     }
 
+    // Activity Contracts
+    // Contract to Request Permission if not granted
+    public ActivityResultLauncher<String> requestPerms = registerForActivityResult(new ActivityResultContracts.RequestPermission(), result -> Log.i(TAG, "onActivityResult: " + result));
+
+    // Display current users profile information
+    private void displayInfo(){
+
+        emailETV.setText(user.getEmail());
+
+        if (user.getDisplayName() != null) {
+            uName.setText(user.getDisplayName());
+        }
+
+        if (user.getPhotoUrl() != null) {
+            profileImage.setImageURI(user.getPhotoUrl());
+        }
+
+    }
+
+    // Intent to send the user back to Log In Screen
+    private void logOutIntent(){
+        FirebaseAuth.getInstance().signOut();
+        Intent logInIntent = new Intent(EditProfileActivity.this, LoginActivity.class);
+        startActivity(logInIntent);
+    }
+
+    // Method to validate user entries for blanks and whitespace
+    private boolean nullCheck(String email, String username){
+
+        if (email.isEmpty() || email.trim().isEmpty()){
+            return false;
+        }
+        else return !username.isEmpty() && !username.trim().isEmpty();
+    }
+
     // Intent for Taking a Photo with Camera
     private void dispatchTakePictureIntent(Intent i) {
         try {
@@ -156,6 +154,29 @@ public class EditProfileActivity extends AppCompatActivity {
         } catch (ActivityNotFoundException e) {
             // display error state to the user
         }
+    }
+
+    // Method to remove users account
+    private void deleteUser() {
+        user.delete()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "User account deleted.");
+                    }
+                });
+
+        logOutIntent();
+    }
+
+    // Method to update users email address
+    private void updateEmail(String newEmail) {
+        user.updateEmail(newEmail)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "User email address updated.");
+                    }
+                })
+                .addOnFailureListener(e -> errorLabel.setText(e.getLocalizedMessage()));
     }
 
     // Method used to retrieve the users profile image uri
@@ -196,12 +217,7 @@ public class EditProfileActivity extends AppCompatActivity {
                                     Log.d(TAG, "User profile updated.");
                                 }
                             })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            errorLabel.setText(e.getLocalizedMessage());
-                        }
-                    });
+                    .addOnFailureListener(e -> errorLabel.setText(e.getLocalizedMessage()));
                 }
 
                 if (updatedImg){
@@ -217,12 +233,7 @@ public class EditProfileActivity extends AppCompatActivity {
                                     Log.d(TAG, "User profile updated.");
                                 }
                             })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    errorLabel.setText(e.getLocalizedMessage());
-                                }
-                            });
+                            .addOnFailureListener(e -> errorLabel.setText(e.getLocalizedMessage()));
                 }
 
                 errorLabel.setText(R.string.prompt_profile_updated);
@@ -235,41 +246,16 @@ public class EditProfileActivity extends AppCompatActivity {
         }
     };
 
-    private void updateEmail(String newEmail) {
-        user.updateEmail(newEmail)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Log.d(TAG, "User email address updated.");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        errorLabel.setText(e.getLocalizedMessage());
-                    }
-                });
-    }
-
+    // OnClickListener for Reset Password button
     View.OnClickListener resetClick = v -> {
         Intent resetIntent = new Intent(EditProfileActivity.this, ResetPasswordActivity.class);
         startActivity(resetIntent);
     };
 
-    View.OnClickListener deleteClick = v -> {
-        deleteUser();
-    };
+    // OnClickListener for Delete Account button
+    View.OnClickListener deleteClick = v -> deleteUser();
 
-    private void deleteUser() {
-        user.delete()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Log.d(TAG, "User account deleted.");
-                    }
-                });
-
-        logOutIntent();
-    }
-
+    // OnClickListener for Image upload button
     View.OnClickListener uploadClick = v -> {
 
         // TODO: Request Permission

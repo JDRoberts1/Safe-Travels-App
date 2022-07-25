@@ -3,7 +3,6 @@ package com.fullsail.android.safetravels;
 import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -16,20 +15,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -83,61 +76,6 @@ public class RegisterActivity extends AppCompatActivity {
         profileImage = findViewById(R.id.profile_picture_iv_etv);
     }
 
-    View.OnClickListener registerClick = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-
-            if (checkForEmptyFields()){
-                final String email = emailETV.getText().toString();
-                final String password = passwordETV.getText().toString();
-
-                mAuth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-                                    Log.d(TAG, "createUserWithEmail:success");
-                                    FirebaseUser user = mAuth.getCurrentUser();
-
-                                    if (user != null) {
-                                        updateUI(user);
-                                    }
-
-                                    logInScreenIntent();
-
-                                }
-                                else {
-                                    // If sign in fails, display a message to the user.
-                                    Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                                }
-                            }
-                        })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        errorLabel.setText(e.getLocalizedMessage());
-                    }
-                });
-            }
-            else{
-                errorLabel.setText(R.string.warning_empty_field);
-            }
-        }
-    };
-
-    private void logInScreenIntent() {
-        // Intent to Main screen
-        Intent logInScreenIntent = new Intent(RegisterActivity.this, LoginActivity.class);
-        startActivity(logInScreenIntent);
-    }
-
-    // Activity Contracts
-
-    // Contract to Request Permission if not granted
-    public ActivityResultLauncher<String> requestPerms = registerForActivityResult(new ActivityResultContracts.RequestPermission(), result -> Log.i(TAG, "onActivityResult: " + result));
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -164,6 +102,18 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
+    // Activity Contracts
+    // Contract to Request Permission if not granted
+    public ActivityResultLauncher<String> requestPerms = registerForActivityResult(new ActivityResultContracts.RequestPermission(), result -> Log.i(TAG, "onActivityResult: " + result));
+
+    // Intent to take user to the Log In activity
+    private void logInScreenIntent() {
+        // Intent to Main screen
+        Intent logInScreenIntent = new Intent(RegisterActivity.this, LoginActivity.class);
+        startActivity(logInScreenIntent);
+    }
+
+    // Intent for Taking a Photo with Camera
     private void dispatchTakePictureIntent(Intent i) {
         try {
             startActivityForResult(i, REQUEST_IMAGE_CAPTURE);
@@ -172,6 +122,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
+    // Intent for choosing image from gallery
     private void dispatchGetPictureIntent(Intent i) {
         try {
             startActivityForResult(i, REQUEST_IMAGE_GALLERY);
@@ -180,6 +131,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
+    // Method used to retrieve the users profile image uri
     public Uri getImgUri(Context c, Bitmap bitmapImg, String uuid){
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         bitmapImg.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
@@ -187,6 +139,7 @@ public class RegisterActivity extends AppCompatActivity {
         return Uri.parse(path);
     }
 
+    // Method to validate user entries for blanks and whitespace
     private boolean checkForEmptyFields(){
         // Check if any fiends are empty or only contain whitespace
         if (uName.getText().toString().isEmpty() || uName.getText().toString().trim().isEmpty()){
@@ -198,6 +151,7 @@ public class RegisterActivity extends AppCompatActivity {
         else return !passwordETV.getText().toString().isEmpty() && !passwordETV.getText().toString().trim().isEmpty();
     }
 
+    // Method to update UI and take the user to the log in screen
     private void updateUI(FirebaseUser user) {
 
         String userName = uName.getText().toString();
@@ -217,56 +171,83 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         user.updateProfile(profileUpdates)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "User profile updated.");
-                        }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "User profile updated.");
                     }
                 });
 
     }
 
-    View.OnClickListener signInClick = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
+    // OnClickListener for Sign-In textview
+    View.OnClickListener signInClick = v -> {
 
-            // TODO: Create Intent to take user to sign in screen
-            logInScreenIntent();
-        }
+        // TODO: Create Intent to take user to sign in screen
+        logInScreenIntent();
     };
 
-    View.OnClickListener uploadClick = new View.OnClickListener() {
+    // OnClickListener for Upload Image button
+    View.OnClickListener uploadClick = v -> {
+
+        // TODO: Request Permission
+        if (ActivityCompat.checkSelfPermission(RegisterActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+            requestPerms.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+
+        // TODO: SET UP CAMERA code
+        final CharSequence[] items = {"Take A Photo", "Choose from Gallery", "Cancel"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+        builder.setTitle(R.string.prompt_photo);
+        builder.setItems(items, (dialog, which) -> {
+            if (items[which].equals("Take A Photo")){
+
+                dispatchTakePictureIntent(cameraIntent);
+            }
+            else if (items[which].equals("Choose from Gallery")){
+                galleryIntent.setType("image/*");
+                dispatchGetPictureIntent(galleryIntent);
+            }
+        });
+
+        builder.show();
+    };
+
+    // OnClickListener for Register button
+    View.OnClickListener registerClick = new View.OnClickListener() {
+
         @Override
         public void onClick(View v) {
 
-            // TODO: Request Permission
-            if (ActivityCompat.checkSelfPermission(RegisterActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (checkForEmptyFields()){
+                final String email = emailETV.getText().toString();
+                final String password = passwordETV.getText().toString();
 
-                requestPerms.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                mAuth.createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(RegisterActivity.this, task -> {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                Log.d(TAG, "createUserWithEmail:success");
+                                FirebaseUser user = mAuth.getCurrentUser();
+
+                                if (user != null) {
+                                    updateUI(user);
+                                }
+
+                                logInScreenIntent();
+
+                            }
+                            else {
+                                // If sign in fails, display a message to the user.
+                                Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            }
+                        })
+                        .addOnFailureListener(e -> errorLabel.setText(e.getLocalizedMessage()));
             }
-
-            // TODO: SET UP CAMERA code
-            final CharSequence[] items = {"Take A Photo", "Choose from Gallery", "Cancel"};
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-            builder.setTitle(R.string.prompt_photo);
-            builder.setItems(items, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if (items[which].equals("Take A Photo")){
-
-                        dispatchTakePictureIntent(cameraIntent);
-                    }
-                    else if (items[which].equals("Choose from Gallery")){
-                        galleryIntent.setType("image/*");
-                        dispatchGetPictureIntent(galleryIntent);
-                    }
-                }
-            });
-
-            builder.show();
+            else{
+                errorLabel.setText(R.string.warning_empty_field);
+            }
         }
     };
 }
