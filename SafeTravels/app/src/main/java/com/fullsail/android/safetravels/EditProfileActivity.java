@@ -80,6 +80,7 @@ public class EditProfileActivity extends AppCompatActivity {
         displayInfo();
     }
 
+    // Display current users profile information
     private void displayInfo(){
 
         emailETV.setText(user.getEmail());
@@ -94,12 +95,13 @@ public class EditProfileActivity extends AppCompatActivity {
 
     }
 
+    // Intent to send the user back to Log In Screen
     private void logOutIntent(){
         FirebaseAuth.getInstance().signOut();
         Intent logInIntent = new Intent(EditProfileActivity.this, LoginActivity.class);
         startActivity(logInIntent);
     }
-    
+
 
     private boolean nullCheck(String email, String username){
 
@@ -110,11 +112,10 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     // Activity Contracts
-
     // Contract to Request Permission if not granted
     public ActivityResultLauncher<String> requestPerms = registerForActivityResult(new ActivityResultContracts.RequestPermission(), result -> Log.i(TAG, "onActivityResult: " + result));
 
-
+// Activity Result for Camera Intent
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -139,7 +140,7 @@ public class EditProfileActivity extends AppCompatActivity {
         profileImage.setImageBitmap(imageBitmap);
     }
 
-
+    // Intent for Taking a Photo with Camera
     private void dispatchTakePictureIntent(Intent i) {
         try {
             startActivityForResult(i, REQUEST_IMAGE_CAPTURE);
@@ -148,6 +149,7 @@ public class EditProfileActivity extends AppCompatActivity {
         }
     }
 
+    // Intent for choosing image from gallery
     private void dispatchGetPictureIntent(Intent i) {
         try {
             startActivityForResult(i, REQUEST_IMAGE_GALLERY);
@@ -156,6 +158,7 @@ public class EditProfileActivity extends AppCompatActivity {
         }
     }
 
+    // Method used to retrieve the users profile image uri
     public Uri getImgUri(Context c, Bitmap bitmapImg, String uuid){
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         bitmapImg.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
@@ -163,6 +166,7 @@ public class EditProfileActivity extends AppCompatActivity {
         return Uri.parse(path);
     }
 
+    // OnClickListener for Update button Press
     View.OnClickListener updateClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
