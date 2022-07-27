@@ -1,29 +1,42 @@
 package com.fullsail.android.safetravels;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
-
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+import com.squareup.okhttp.ResponseBody;
 
-public class MainActivity extends AppCompatActivity {
+import org.json.JSONArray;
+import org.json.JSONObject;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
+public class MainActivity extends AppCompatActivity implements DataTask.OnFinished {
+
+    private static final String TAG = "MainActivity";
     SearchView searchView;
     TextView welcomeLabel;
     ImageView iv;
+
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     FirebaseUser cUser = mAuth.getCurrentUser();
-    String apiKey = "ZmNiYzFjZTc5NjA5NGQ5YjliYjAwODQ3ZWY3OGI2YzM6ZjdkNzU0NWEtMmI4NS00MjYwLTk2YzMtYWE5ODk5MTE3N2M1";
+    DataTask dt = null;
+    public static ArrayList<String> searchResults = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +47,11 @@ public class MainActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                connCheck();
+
+                if (connCheck()){
+                    apiResults();
+                }
+
                 return false;
             }
 
@@ -61,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
         if (cUser.getPhotoUrl() != null) {
             iv.setImageURI(cUser.getPhotoUrl());
         }
-
     }
 
     // Menu Creation
@@ -94,8 +110,78 @@ public class MainActivity extends AppCompatActivity {
 
     // Check network connection
     private boolean connCheck(){
-        String status = UtilsHelper.getConnectivityStatusString(MainActivity.this);
-        Toast.makeText(this, status, Toast.LENGTH_SHORT).show();
-        return status != null;
+
+        return UtilsHelper.getConnectivityStatusString(this);
+    }
+
+    // Method to parse json
+    public static void parseJson(String _jsonDataString){
+
+        // Title & Subtitle
+        String _city;
+        String _country;
+        String _state;
+
+        try {
+
+            JSONArray outerArr = new JSONArray(_jsonDataString);
+
+            for (int i = 0; i < outerArr.length(); i++){
+                JSONObject obj = outerArr.getJSONObject(i);
+                _city = obj.getString("name");
+
+                JSONObject innerOuterObj = obj.getJSONObject("country");
+                _country = innerOuterObj.getString("id");
+
+                JSONObject innerObj = innerOuterObj.getJSONObject("adminDivision1");
+                _state = innerObj.getString("name");
+
+                String result = _city + "," + _state + ", " + _country;
+                searchResults.add(result);
+            }
+
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+
+        // Check final ArrayList
+        Log.i(TAG, "parseJson: " + searchResults.size());
+
+    }
+
+    private void apiResults(){
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url("https://spott.p.rapidapi.com/places/autocomplete?limit=10&skip=0&country=US%2CCA&q=Sea&type=CITY")
+                .get()
+                .addHeader("X-RapidAPI-Key", "a37b576032msha06820f5d94f387p144c67jsn8b971038de49")
+                .addHeader("X-RapidAPI-Host", "spott.p.rapidapi.com")
+                .build();
+
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                Log.w(TAG, "onFailure: ", e);
+            }
+
+            @Override
+            public void onResponse(Response response) throws IOException {
+
+                ResponseBody body = response.body();
+
+                String results = body.string();
+
+                Log.i(TAG, "onResponse: " + results);
+
+            }
+        });
+    }
+
+    // Post Execute method to parse API results
+    @Override
+    public void onPost(String result) {
+        parseJson(result);
     }
 }
