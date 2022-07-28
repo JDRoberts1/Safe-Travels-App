@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements DataTask.OnFinish
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     FirebaseUser cUser = mAuth.getCurrentUser();
     DataTask dt = null;
-    public static ArrayList<String> searchResults = null;
+    public static ArrayList<String> searchResults = new ArrayList<>();
 
 
     @Override
@@ -49,7 +49,8 @@ public class MainActivity extends AppCompatActivity implements DataTask.OnFinish
             public boolean onQueryTextSubmit(String query) {
 
                 if (connCheck()){
-                    apiResults();
+                    DataTask dT = new DataTask(MainActivity.this);
+                    dT.execute();
                 }
 
                 return false;
@@ -133,10 +134,11 @@ public class MainActivity extends AppCompatActivity implements DataTask.OnFinish
                 JSONObject innerOuterObj = obj.getJSONObject("country");
                 _country = innerOuterObj.getString("id");
 
-                JSONObject innerObj = innerOuterObj.getJSONObject("adminDivision1");
+                JSONObject innerObj = obj.getJSONObject("adminDivision1");
                 _state = innerObj.getString("name");
 
                 String result = _city + "," + _state + ", " + _country;
+
                 searchResults.add(result);
             }
 
@@ -148,37 +150,7 @@ public class MainActivity extends AppCompatActivity implements DataTask.OnFinish
         Log.i(TAG, "parseJson: " + searchResults.size());
 
     }
-
-    private void apiResults(){
-        OkHttpClient client = new OkHttpClient();
-
-        Request request = new Request.Builder()
-                .url("https://spott.p.rapidapi.com/places/autocomplete?limit=10&skip=0&country=US%2CCA&q=Sea&type=CITY")
-                .get()
-                .addHeader("X-RapidAPI-Key", "a37b576032msha06820f5d94f387p144c67jsn8b971038de49")
-                .addHeader("X-RapidAPI-Host", "spott.p.rapidapi.com")
-                .build();
-
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Request request, IOException e) {
-                Log.w(TAG, "onFailure: ", e);
-            }
-
-            @Override
-            public void onResponse(Response response) throws IOException {
-
-                ResponseBody body = response.body();
-
-                String results = body.string();
-
-                Log.i(TAG, "onResponse: " + results);
-
-            }
-        });
-    }
-
+    
     // Post Execute method to parse API results
     @Override
     public void onPost(String result) {

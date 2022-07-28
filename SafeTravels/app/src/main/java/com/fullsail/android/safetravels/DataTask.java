@@ -3,18 +3,14 @@ package com.fullsail.android.safetravels;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
-import com.squareup.okhttp.ResponseBody;
 
 import org.apache.commons.io.IOUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 public class DataTask extends AsyncTask<String, String, String> {
     private static final String TAG = "AsyncTask: ";
@@ -41,27 +37,37 @@ public class DataTask extends AsyncTask<String, String, String> {
                 .addHeader("X-RapidAPI-Host", "spott.p.rapidapi.com")
                 .build();
 
+        Response response = null;
+
+        try {
+            response = client.newCall(request).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         String results = null;
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Request request, IOException e) {
-                Log.w(TAG, "onFailure: ", e);
+       InputStream iS = null;
+       String result = "ERROR: Results not set. . .";
+
+        try {
+            if (response != null) {
+                iS = response.body().byteStream();
+                result = IOUtil.toString(iS, "UTF-8");
             }
-
-            @Override
-            public void onResponse(Response response) throws IOException {
-
-                ResponseBody body = response.body();
-
-                String results = body.string();
-
-                Log.i(TAG, "onResponse: " + results);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                iS.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        });
+        }
 
-        return null;
+        Log.i(TAG, "doInBackground: " + result);
+        return result;
     }
 
     @Override
