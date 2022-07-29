@@ -27,7 +27,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements DataTask.OnFinished {
 
-    private static final String TAG = "MainActivity";
+    public static final String TAG = "MainActivity";
     SearchView searchView;
     TextView welcomeLabel;
     ImageView iv;
@@ -49,8 +49,9 @@ public class MainActivity extends AppCompatActivity implements DataTask.OnFinish
             public boolean onQueryTextSubmit(String query) {
 
                 if (connCheck()){
+                    String searchQuery = query.replaceAll(" ","%");
                     DataTask dT = new DataTask(MainActivity.this);
-                    dT.execute();
+                    dT.execute(searchQuery);
                 }
 
                 return false;
@@ -79,34 +80,6 @@ public class MainActivity extends AppCompatActivity implements DataTask.OnFinish
         if (cUser.getPhotoUrl() != null) {
             iv.setImageURI(cUser.getPhotoUrl());
         }
-    }
-
-    // Menu Creation
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    // Method for menu selections
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        if (item.getItemId() == R.id.menu_edit_profile){
-            Intent editIntent = new Intent(MainActivity.this, EditProfileActivity.class);
-            startActivity(editIntent);
-        }
-        else if (item.getItemId() == R.id.menu_log_out){
-
-            // Log the current user out
-            mAuth.signOut();
-
-            // Once user is logged out send user back to the log in screen
-            Intent logInIntent = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(logInIntent);
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     // Check network connection
@@ -139,7 +112,9 @@ public class MainActivity extends AppCompatActivity implements DataTask.OnFinish
 
                 String result = _city + "," + _state + ", " + _country;
 
-                searchResults.add(result);
+                if (!searchResults.contains(result)){
+                    searchResults.add(result);
+                }
             }
 
         } catch(Exception e){
@@ -150,10 +125,47 @@ public class MainActivity extends AppCompatActivity implements DataTask.OnFinish
         Log.i(TAG, "parseJson: " + searchResults.size());
 
     }
-    
+
+    // Intent method to take use to search results activity
+    public void resultsIntent(){
+        Intent resultsIntent = new Intent(MainActivity.this, SearchResultsActivity.class);
+        resultsIntent.putExtra(TAG, searchResults);
+        startActivity(resultsIntent);
+        searchResults.clear();
+    }
+
+    // Menu Creation
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    // Method for menu selections
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if (item.getItemId() == R.id.menu_edit_profile){
+            Intent editIntent = new Intent(MainActivity.this, EditProfileActivity.class);
+            startActivity(editIntent);
+        }
+        else if (item.getItemId() == R.id.menu_log_out){
+
+            // Log the current user out
+            mAuth.signOut();
+
+            // Once user is logged out send user back to the log in screen
+            Intent logInIntent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(logInIntent);
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     // Post Execute method to parse API results
     @Override
     public void onPost(String result) {
         parseJson(result);
+        resultsIntent();
     }
 }

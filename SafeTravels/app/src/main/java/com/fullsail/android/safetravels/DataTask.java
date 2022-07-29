@@ -27,11 +27,13 @@ public class DataTask extends AsyncTask<String, String, String> {
     @Override
     protected String doInBackground(String... strings) {
 
+        String query = strings[0];
+
         // TODO: PULL DATA FROM API
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("https://spott.p.rapidapi.com/places/autocomplete?limit=10&skip=0&country=US%2CCA&q=Sea&type=CITY")
+                .url("https://spott.p.rapidapi.com/places/autocomplete?limit=10&skip=0&country=US%2CCA&q="+query+"&type=CITY")
                 .get()
                 .addHeader("X-RapidAPI-Key", "a37b576032msha06820f5d94f387p144c67jsn8b971038de49")
                 .addHeader("X-RapidAPI-Host", "spott.p.rapidapi.com")

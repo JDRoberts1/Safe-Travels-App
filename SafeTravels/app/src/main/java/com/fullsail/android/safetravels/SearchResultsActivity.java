@@ -1,27 +1,37 @@
 package com.fullsail.android.safetravels;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 
-public class SearchResultsActivity extends BaseAdapter {
-    @Override
-    public int getCount() {
-        return 0;
-    }
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
-    @Override
-    public Object getItem(int position) {
-        return null;
-    }
+import java.util.ArrayList;
 
-    @Override
-    public long getItemId(int position) {
-        return 0;
-    }
+public class SearchResultsActivity extends AppCompatActivity {
+
+    ListView searchResultsView;
+    ListViewAdapter adpt;
+    ArrayList<String> searchResults = new ArrayList<>();
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        return null;
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_search_results);
+
+        Bundle extras = getIntent().getExtras();
+        searchResults = extras.getStringArrayList(MainActivity.TAG);
+
+
+        searchResultsView = findViewById(R.id.listview);
+        adpt = new ListViewAdapter(this, searchResults);
+        searchResultsView.setAdapter(adpt);
+
+
     }
 }
