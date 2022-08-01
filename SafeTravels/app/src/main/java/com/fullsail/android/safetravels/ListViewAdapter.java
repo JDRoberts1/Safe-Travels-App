@@ -68,8 +68,7 @@ public class ListViewAdapter extends BaseAdapter {
         vh._favBttn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Drawable tapped =  AppCompatResources.getDrawable(mContext, R.drawable.ic_baseline_favorite_tapped);
-                vh._favBttn.setImageDrawable(tapped);
+                vh._favBttn.setColorFilter(R.color.orange_700);
             }
         });
 

@@ -18,17 +18,24 @@ import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -46,6 +53,7 @@ public class RegisterActivity extends AppCompatActivity {
     Bitmap imageBitmap = null;
     boolean imgUploaded = false;
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_IMAGE_GALLERY = 2;
     Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -103,6 +111,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     // Activity Contracts
+
     // Contract to Request Permission if not granted
     public ActivityResultLauncher<String> requestPerms = registerForActivityResult(new ActivityResultContracts.RequestPermission(), result -> Log.i(TAG, "onActivityResult: " + result));
 
@@ -156,18 +165,29 @@ public class RegisterActivity extends AppCompatActivity {
 
         String userName = uName.getText().toString();
 
+        Map<String, Object> newUser = new HashMap<>();
+        newUser.put("username", userName);
+        newUser.put("userId", user.getUid());
+        newUser.put("email", user.getEmail());
+
         UserProfileChangeRequest profileUpdates;
+        Uri imgUri;
         if (imgUploaded){
-            Uri imgUri = getImgUri(this, imageBitmap, user.getUid());
+            imgUri = getImgUri(this, imageBitmap, user.getUid());
 
             profileUpdates = new UserProfileChangeRequest.Builder()
                     .setDisplayName(userName)
                     .setPhotoUri(imgUri)
                     .build();
+
+            newUser.put("profileImg", imgUri);
+
         } else{
             profileUpdates = new UserProfileChangeRequest.Builder()
                     .setDisplayName(userName)
                     .build();
+
+
         }
 
         user.updateProfile(profileUpdates)
@@ -176,6 +196,30 @@ public class RegisterActivity extends AppCompatActivity {
                         Log.d(TAG, "User profile updated.");
                     }
                 });
+
+        
+
+        // Add a new document with a generated ID
+        db.collection("users")
+                .document(user.getUid())
+                .set(newUser)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });
+
+    }
+
+    // Method to add new user to Firestore Collection
+    private void addToCollection(FirebaseUser user) {
 
     }
 
@@ -233,7 +277,10 @@ public class RegisterActivity extends AppCompatActivity {
 
                                 if (user != null) {
                                     updateUI(user);
+                                    addToCollection(user);
+
                                 }
+
 
                                 logInScreenIntent();
 
