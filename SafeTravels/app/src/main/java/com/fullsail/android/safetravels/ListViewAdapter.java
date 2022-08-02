@@ -2,6 +2,7 @@ package com.fullsail.android.safetravels;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,15 +11,30 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ListViewAdapter extends BaseAdapter {
 
     private static final long BASE_ID = 0x1011;
+    private static final String TAG = "ListViewAdapter";
     private Context mContext = null;
     private ArrayList<String> mResults = null;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    FirebaseUser cUser = mAuth.getCurrentUser();
+    private Integer index = 0;
 
     public ListViewAdapter(Context mContext, ArrayList<String> mResults) {
         this.mContext = mContext;
@@ -65,10 +81,36 @@ public class ListViewAdapter extends BaseAdapter {
             vh._resultLabel.setText(r);
         }
 
+        Map<String, Object> newFavorite = new HashMap<>();
+        index+=1;
+        newFavorite.put(index.toString(), r);
+
         vh._favBttn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 vh._favBttn.setColorFilter(R.color.orange_700);
+
+                if (r != null) {
+                    db.collection("users")
+                            .document(cUser.getUid())
+                            .collection("favorites")
+                            .document(r)
+                            .set(newFavorite)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    Log.d(TAG, "DocumentSnapshot successfully written!");
+
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "Error writing document", e);
+                                }
+                            });
+                }
             }
         });
 

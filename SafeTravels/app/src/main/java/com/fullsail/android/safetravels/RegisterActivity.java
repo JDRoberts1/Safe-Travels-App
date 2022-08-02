@@ -183,21 +183,21 @@ public class RegisterActivity extends AppCompatActivity {
             newUser.put("profileImg", imgUri);
 
         } else{
+
             profileUpdates = new UserProfileChangeRequest.Builder()
                     .setDisplayName(userName)
                     .build();
-
-
         }
 
         user.updateProfile(profileUpdates)
                 .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
+                    if (task.isSuccessful())
+                    {
                         Log.d(TAG, "User profile updated.");
                     }
                 });
 
-        
+
 
         // Add a new document with a generated ID
         db.collection("users")

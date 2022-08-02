@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -25,7 +26,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements DataTask.OnFinished {
+public class MainActivity extends AppCompatActivity implements DataTask.OnFinished, DBTask {
 
     public static final String TAG = "MainActivity";
     SearchView searchView;
@@ -167,5 +168,10 @@ public class MainActivity extends AppCompatActivity implements DataTask.OnFinish
     public void onPost(String result) {
         parseJson(result);
         resultsIntent();
+    }
+
+    @Override
+    public FirebaseFirestore getDatabase() {
+        return FirebaseFirestore.getInstance();
     }
 }
