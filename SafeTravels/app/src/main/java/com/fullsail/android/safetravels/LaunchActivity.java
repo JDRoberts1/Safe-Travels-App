@@ -13,8 +13,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class LaunchActivity extends AppCompatActivity {
 
     final Handler handler = new Handler();
-    FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    FirebaseUser cUser = null;
+    FirebaseUser cUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +42,7 @@ public class LaunchActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         // check if a user is currently logged in
         cUser = mAuth.getCurrentUser();
     }
@@ -50,7 +50,7 @@ public class LaunchActivity extends AppCompatActivity {
     // MARK: toMainScreen
     // method to take the user to the main screen if already logged in
     private void toMainScreen(){
-        Intent mainScreenIntent = new Intent(this, MainActivity.class);
+        Intent mainScreenIntent = new Intent(this, HomeActivity.class);
         startActivity(mainScreenIntent);
     }
 

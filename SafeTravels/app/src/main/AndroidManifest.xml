@@ -18,6 +18,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SafeTravels.Starting">
         <activity
+            android:name=".HomeActivity"
+            android:exported="false"
+            android:label="@string/title_activity_home"
+            android:theme="@style/Theme.SafeTravels" />
+        <activity
+            android:name=".FavoritesActivity"
+            android:exported="false" />
+        <activity
             android:name=".RegisterActivity"
             android:exported="false"
             android:label="@string/title_activity_register" />
@@ -35,30 +43,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name=".MainActivity"
+            android:name=".fragments.HomeFragment"
             android:exported="true"
-            android:theme="@style/Theme.SafeTravels">
-
-        </activity>
-
+            android:theme="@style/Theme.SafeTravels" />
         <activity
             android:name=".EditProfileActivity"
             android:exported="true"
-            android:theme="@style/Theme.SafeTravels"
-            android:parentActivityName=".MainActivity">
-        </activity>
-
-        <activity android:name=".ResetPasswordActivity"
+            android:parentActivityName=".fragments.HomeFragment"
+            android:theme="@style/Theme.SafeTravels" />
+        <activity
+            android:name=".ResetPasswordActivity"
             android:exported="true"
-            android:theme="@style/Theme.SafeTravels">
-        </activity>
-        <activity android:name=".SearchResultsActivity"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/Theme.SafeTravels">
-
-        </activity>
+            android:theme="@style/Theme.SafeTravels" />
+        <activity
+            android:name=".SearchResultsActivity"
+            android:parentActivityName=".fragments.HomeFragment"
+            android:theme="@style/Theme.SafeTravels" />
 
         <meta-data
             android:name="preloaded_fonts"

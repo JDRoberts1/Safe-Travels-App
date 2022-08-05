@@ -112,7 +112,7 @@ public class LoginActivity extends AppCompatActivity {
     private void updateUI(FirebaseUser user) {
         // TODO: Create Intent to take user to the main screen
         if (user != null){
-            Intent mainScreenIntent = new Intent(this, MainActivity.class);
+            Intent mainScreenIntent = new Intent(this, HomeActivity.class);
             mainScreenIntent.putExtra(TAG, user);
             startActivity(mainScreenIntent);
         }

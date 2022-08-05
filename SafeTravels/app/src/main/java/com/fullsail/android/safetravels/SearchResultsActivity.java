@@ -1,15 +1,12 @@
 package com.fullsail.android.safetravels;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.fullsail.android.safetravels.fragments.HomeFragment;
 
 import java.util.ArrayList;
 
@@ -25,7 +22,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search_results);
 
         Bundle extras = getIntent().getExtras();
-        searchResults = extras.getStringArrayList(MainActivity.TAG);
+        searchResults = extras.getStringArrayList(HomeFragment.TAG);
 
 
         searchResultsView = findViewById(R.id.listview);
