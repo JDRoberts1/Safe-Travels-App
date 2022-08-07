@@ -1,4 +1,4 @@
-package com.fullsail.android.safetravels;
+package com.fullsail.android.safetravels.fragments;
 
 import android.Manifest;
 import android.content.ActivityNotFoundException;
@@ -23,6 +23,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.fullsail.android.safetravels.LoginActivity;
+import com.fullsail.android.safetravels.R;
+import com.fullsail.android.safetravels.ResetPasswordActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -30,9 +33,9 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-public class EditProfileActivity extends AppCompatActivity {
+public class EditProfileFragment extends AppCompatActivity {
 
-    private static final String TAG = "EditProfileActivity";
+    private static final String TAG = "EditProfileFragment";
     boolean updatedImg = false;
     Bitmap imageBitmap = null;
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -125,7 +128,7 @@ public class EditProfileActivity extends AppCompatActivity {
     // Intent to send the user back to Log In Screen
     private void logOutIntent(){
         FirebaseAuth.getInstance().signOut();
-        Intent logInIntent = new Intent(EditProfileActivity.this, LoginActivity.class);
+        Intent logInIntent = new Intent(EditProfileFragment.this, LoginActivity.class);
         startActivity(logInIntent);
     }
 
@@ -221,7 +224,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 }
 
                 if (updatedImg){
-                    Uri imgUri = getImgUri(EditProfileActivity.this, imageBitmap, user.getUid());
+                    Uri imgUri = getImgUri(EditProfileFragment.this, imageBitmap, user.getUid());
 
                     UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                             .setPhotoUri(imgUri)
@@ -248,7 +251,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     // OnClickListener for Reset Password button
     View.OnClickListener resetClick = v -> {
-        Intent resetIntent = new Intent(EditProfileActivity.this, ResetPasswordActivity.class);
+        Intent resetIntent = new Intent(EditProfileFragment.this, ResetPasswordActivity.class);
         startActivity(resetIntent);
     };
 
@@ -259,7 +262,7 @@ public class EditProfileActivity extends AppCompatActivity {
     View.OnClickListener uploadClick = v -> {
 
         // TODO: Request Permission
-        if (ActivityCompat.checkSelfPermission(EditProfileActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(EditProfileFragment.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 
             requestPerms.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
@@ -267,7 +270,7 @@ public class EditProfileActivity extends AppCompatActivity {
         // TODO: SET UP CAMERA code
         final CharSequence[] items = {"Take A Photo", "Choose from Gallery", "Cancel"};
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(EditProfileActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(EditProfileFragment.this);
         builder.setTitle(R.string.prompt_photo);
         builder.setItems(items, (dialog, which) -> {
             if (items[which].equals("Take A Photo")){

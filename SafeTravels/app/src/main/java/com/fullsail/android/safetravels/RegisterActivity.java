@@ -171,7 +171,7 @@ public class RegisterActivity extends AppCompatActivity {
         newUser.put("email", user.getEmail());
 
         UserProfileChangeRequest profileUpdates;
-        Uri imgUri;
+        Uri imgUri = null;
         if (imgUploaded){
             imgUri = getImgUri(this, imageBitmap, user.getUid());
 
@@ -189,6 +189,7 @@ public class RegisterActivity extends AppCompatActivity {
                     .build();
         }
 
+        // Update profile call
         user.updateProfile(profileUpdates)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful())
@@ -199,10 +200,32 @@ public class RegisterActivity extends AppCompatActivity {
 
 
 
-        // Add a new document with a generated ID
+        // Add a new user document with a user ID
         db.collection("users")
                 .document(user.getUid())
                 .set(newUser)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });
+
+        Map<String, Object> userListIem = new HashMap<>();
+        userListIem.put("username", userName);
+        userListIem.put("userId", user.getUid());
+        userListIem.put("img", imgUri);
+
+        // Add a new user to userList with a user ID
+        db.collection("userList")
+                .document(user.getUid())
+                .set(userListIem)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

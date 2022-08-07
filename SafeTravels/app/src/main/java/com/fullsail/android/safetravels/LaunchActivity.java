@@ -13,7 +13,8 @@ import com.google.firebase.auth.FirebaseUser;
 public class LaunchActivity extends AppCompatActivity {
 
     final Handler handler = new Handler();
-    FirebaseUser cUser;
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    FirebaseUser cUser = mAuth.getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +27,9 @@ public class LaunchActivity extends AppCompatActivity {
             @Override
             public void run() {
                 // TODO: check if a user is currently logged in
+                //toLogInScreen();
 
+                // check if a user is currently logged in
                 if (cUser != null){
                     toMainScreen();
                 }
@@ -35,16 +38,6 @@ public class LaunchActivity extends AppCompatActivity {
                 }
             }
         }, 1000);
-    }
-
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        // check if a user is currently logged in
-        cUser = mAuth.getCurrentUser();
     }
 
     // MARK: toMainScreen

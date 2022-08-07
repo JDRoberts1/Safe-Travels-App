@@ -1,4 +1,4 @@
-package com.fullsail.android.safetravels;
+package com.fullsail.android.safetravels.utils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

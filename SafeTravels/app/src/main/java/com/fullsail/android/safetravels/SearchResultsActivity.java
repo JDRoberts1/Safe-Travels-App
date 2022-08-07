@@ -6,6 +6,7 @@ import android.widget.ListView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.fullsail.android.safetravels.adapters.ListViewAdapter;
 import com.fullsail.android.safetravels.fragments.HomeFragment;
 
 import java.util.ArrayList;

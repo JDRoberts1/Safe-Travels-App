@@ -1,5 +1,7 @@
 package com.fullsail.android.safetravels;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;

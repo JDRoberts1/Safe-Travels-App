@@ -1,4 +1,4 @@
-package com.fullsail.android.safetravels;
+package com.fullsail.android.safetravels.tasks;
 
 import android.os.AsyncTask;
 import android.util.Log;
