@@ -142,4 +142,15 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
+    <string name="label_chat_list">Chat List</string>
+    <string name="action_create_new_message">Create New Message</string>
+    <string name="label_blog_post">Blog Post</string>
+    <string name="label_location">Location</string>
+    <string name="label_date">Date</string>
+    <string name="label_upload_images">Upload Image(s)</string>
+    <string name="action_post">Post</string>
+    <string name="prompt_post_hint">Tell the community about your trip . . .</string>
+    <string name="prompt_location_hint">Enter trip location</string>
+    <string name="prompt_post_date">When did you go?</string>
+    <string name="label_vaction_photo">vaction photo</string>
 </resources>

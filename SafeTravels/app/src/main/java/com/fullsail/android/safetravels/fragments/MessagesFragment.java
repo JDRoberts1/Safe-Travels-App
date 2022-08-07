@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 
 import com.fullsail.android.safetravels.HomeActivity;
 import com.fullsail.android.safetravels.R;
-import com.fullsail.android.safetravels.fragments.placeholder.PlaceholderContent;
 import com.fullsail.android.safetravels.objects.User;
 import com.fullsail.android.safetravels.adapters.UsersCardViewAdapter;
 import com.google.firebase.auth.FirebaseAuth;
