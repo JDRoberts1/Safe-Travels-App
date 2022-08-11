@@ -46,14 +46,14 @@
         <activity
             android:name=".fragments.EditProfileFragment"
             android:exported="true"
-            android:theme="@style/Theme.SafeTravels" />
+            android:theme="@style/Theme.SafeTravels.Fullscreen" />
         <activity
             android:name=".ResetPasswordActivity"
             android:exported="true"
             android:theme="@style/Theme.SafeTravels" />
         <activity
             android:name=".SearchResultsActivity"
-            android:theme="@style/Theme.SafeTravels" />
+            android:theme="@style/Theme.SafeTravels.Fullscreen" />
 
         <meta-data
             android:name="preloaded_fonts"

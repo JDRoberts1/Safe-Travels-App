@@ -1,25 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/user_ListView_Img"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:src="@drawable/default_img"
+        app:layout_constraintEnd_toStartOf="@+id/userName_LV_Label"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
-        android:id="@+id/resultLabel"
+        android:id="@+id/userName_LV_Label"
         android:layout_width="344dp"
         android:layout_height="60dp"
-        android:text="TextView"
+        android:gravity="center"
         android:textAlignment="center"
-        android:textColor="#546E7A" />
+        android:textColor="#546E7A"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
-        android:id="@+id/favoriteBttn"
-        android:layout_width="0dp"
-        android:layout_height="61dp"
-        android:layout_weight="1"
-        android:backgroundTint="#00FFFFFF"
-        app:srcCompat="@drawable/ic_baseline_favorite_untapped"
-        tools:ignore="SpeakableTextPresentCheck" />
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

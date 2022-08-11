@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -46,7 +48,15 @@ public class MessagesHomeFragment extends Fragment {
         newMessageBttn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new MessagesFragment()).commit();
+
+                NavHostFragment navHostFragment =
+                        (NavHostFragment)  getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_home);
+
+                NavController navController = navHostFragment.getNavController();
+
+                navController.navigate(R.id.action_navigation_messages_to_messagesFragment);
+
+
             }
         });
     }

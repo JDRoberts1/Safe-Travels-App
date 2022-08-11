@@ -6,7 +6,9 @@
         <entry key="app/src/main/res/drawable/bg_gradient.xml" value="0.2535" />
         <entry key="app/src/main/res/drawable/ic_baseline_favorite_24.xml" value="0.2575" />
         <entry key="app/src/main/res/drawable/ic_baseline_favorite_untapped.xml" value="0.2575" />
+        <entry key="app/src/main/res/drawable/ic_baseline_people_alt_24.xml" value="0.2575" />
         <entry key="app/src/main/res/drawable/ic_baseline_person_2_24.xml" value="0.2575" />
+        <entry key="app/src/main/res/drawable/ic_baseline_send_24.xml" value="0.2575" />
         <entry key="app/src/main/res/drawable/ic_dashboard_black_24dp.xml" value="0.2575" />
         <entry key="app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.2575" />
         <entry key="app/src/main/res/drawable/splash_background.xml" value="0.115" />
@@ -29,7 +31,7 @@
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.25021260579427085" />
         <entry key="app/src/main/res/layout/fragment_item.xml" value="0.3302083333333333" />
         <entry key="app/src/main/res/layout/fragment_item_list.xml" value="0.4704778035481771" />
-        <entry key="app/src/main/res/layout/fragment_messages.xml" value="0.3302083333333333" />
+        <entry key="app/src/main/res/layout/fragment_messages.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_messages_home.xml" value="0.3302083333333333" />
         <entry key="app/src/main/res/layout/fragment_new_post.xml" value="0.3302083333333333" />
         <entry key="app/src/main/res/layout/fragment_notifications.xml" value="0.3302083333333333" />

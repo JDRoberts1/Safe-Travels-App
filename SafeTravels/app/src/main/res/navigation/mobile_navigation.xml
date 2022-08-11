@@ -27,7 +27,11 @@
         android:id="@+id/navigation_messages"
         android:name="com.fullsail.android.safetravels.fragments.MessagesHomeFragment"
         android:label="@string/title_messages"
-        tools:layout="@layout/fragment_messages_home" />
+        tools:layout="@layout/fragment_messages_home" >
+        <action
+            android:id="@+id/action_navigation_messages_to_messagesFragment"
+            app:destination="@id/messagesFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_profile"
@@ -38,7 +42,12 @@
         android:id="@+id/messagesFragment"
         android:name="com.fullsail.android.safetravels.fragments.MessagesFragment"
         android:label="fragment_messages"
-        tools:layout="@layout/fragment_messages" />
+        tools:layout="@layout/fragment_messages">
+        <action
+            android:id="@+id/action_messagesFragment_to_navigation_messages"
+            app:destination="@id/navigation_messages" />
+    </fragment>
+
 
 
 </navigation>

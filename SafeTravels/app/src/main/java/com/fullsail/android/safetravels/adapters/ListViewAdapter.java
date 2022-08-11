@@ -99,7 +99,7 @@ public class ListViewAdapter extends BaseAdapter {
         ImageButton _favBttn;
 
         public ViewHolder(View layout){
-            _resultLabel = layout.findViewById(R.id.resultLabel);
+            _resultLabel = layout.findViewById(R.id.userName_LV_Label);
             _favBttn = layout.findViewById(R.id.favoriteBttn);
         }
     }

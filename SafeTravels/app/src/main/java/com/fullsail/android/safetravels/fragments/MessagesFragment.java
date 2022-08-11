@@ -3,9 +3,13 @@ package com.fullsail.android.safetravels.fragments;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -74,7 +78,26 @@ public class MessagesFragment extends Fragment {
         uA = new UsersCardViewAdapter(users, cUser.getDisplayName(), view.getContext());
         rv.setAdapter(uA);
 
-    }
+        NavHostFragment navHostFragment =
+                (NavHostFragment)  getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_home);
+
+        NavController navController = navHostFragment.getNavController();
+
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                // Handle the back button event
+                navController.popBackStack(R.id.navigation_messages,false, true);
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
+
+}
+
+
+
+
 
     public void getUsers(){
         cR.addSnapshotListener(new EventListener<QuerySnapshot>() {
